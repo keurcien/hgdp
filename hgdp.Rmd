@@ -1,0 +1,54 @@
+---
+title: "hgdp"
+output: html_document
+---
+
+## HGDP ID:
+
+[HGDP-CEPH-ID_populations.xls](http://www.cephb.fr/data/HGDP-CEPH-ID_populations.xls)
+
+## French
+
+236:264
+
+## Han
+
+496:508
+532:542
+733:736
+942:951
+
+## Uyghur
+
+952:961
+
+```{r}
+library(data.table)
+setwd("~/Documents/thesis/datasets/hgdp")
+dstan <- as.character(read.table("HGDP_SampleList.txt", header = FALSE)[,1])
+dceph <- read.csv2("HGDP-CEPH-ID_populations.csv", header = TRUE)
+pop.ceph <- as.character(dceph$population)
+dceph <- dceph[pop.ceph %in% c("Han", "Uygur", "French"), ]
+pop.ceph <- as.character(dceph$population)
+ind.ceph <- as.character(dceph$CEPH.ID)
+
+idx <- NULL
+pop <- NULL
+
+for (i in 1:length(dstan)){
+  if (dstan[i] %in% ind.ceph){
+    j <- which(ind.ceph == dstan[i])
+    idx <- c(idx, i)
+    pop <- c(pop, pop.ceph[j])
+  }  
+}
+
+```
+
+```
+geno <- fread("HGDP_FinalReport_Forward.txt", header = TRUE)
+idx <- idx + 1
+geno <- geno[, idx]
+snpinfo <- fread("HGD ")
+
+```
